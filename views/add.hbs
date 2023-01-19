@@ -2,19 +2,19 @@
 
 <form action="/add" method="POST">
     <div class="input-field">
-        <input id="title" name="title" type="text" class="validate" require>
+        <input id="title" name="title" type="text" class="validate" required>
         <label for="title">Course name</label>
         <span class="helper-text" data-error="wrong" data-success="right">Введите название</span>
     </div>
 
     <div class="input-field">
-        <input id="price" name="price" type="number" class="validate" require min="1">
+        <input id="price" name="price" type="number" class="validate" required min="1">
         <label for="price">Price</label>
         <span class="helper-text" data-error="wrong" data-success="right">Введите цену</span>
     </div>
 
     <div class="input-field">
-        <input id="img" name="image" type="text" class="validate" require>
+        <input id="img" name="image" type="text" class="validate" required>
         <label for="price">Image</label>
         <span class="helper-text" data-error="wrong" data-success="right">Введите URL картинки</span>
     </div>
