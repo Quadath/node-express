@@ -10,11 +10,24 @@ router.get('/', (req, res) => {
 })
 
 router.post('/', async (req, res) => {
-  const course = new Course(req.body.title, req.body.price, req.body.img)
+  const course = new Course({
+    title: req.body.title,
+    price: req.body.price,
+    img: req.body.img
+  })
 
-  await course.save()
+  course.save()
+  .then((result) => {
+    res.status(201)
+    .json(result)    
+  })
+  .catch((err) => console.log(`COURSE SAVE ERROR ${err}`))
 
-  res.redirect('/courses')
+  // res.redirect('/courses')
+
+  console.log(null == undefined)
 })
 
 module.exports = router
+
+console.log(![]===[])
