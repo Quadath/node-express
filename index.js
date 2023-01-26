@@ -8,6 +8,8 @@ const cardRoutes = require('./routes/card')
 const addRoutes = require('./routes/add')
 const coursesRoutes = require('./routes/courses')
 
+const User = require('./models/user')
+
 const app = express()
 
 const URL = "mongodb://127.0.0.1:27017/insults"
@@ -15,8 +17,21 @@ const URL = "mongodb://127.0.0.1:27017/insults"
 mongoose.set('strictQuery', false)
 
 mongoose.connect(URL)
-    .then(() => console.log('Connected to MongoDB'))
-    .catch((err) => console.log(`DB connection error: ${err}`))
+  .then(() => console.log('Connected to MongoDB'))
+  .then(async () => {
+    const candidate = await User.findOne()
+    if (!candidate) {
+      const user = new User({
+        email: 'example@email.ua',
+        name: 'Roman',
+        cart: {
+          items: []
+        }
+      })
+      await user.save()
+    }
+  })
+  .catch((err) => console.log(`DB connection error: ${err}`))
 
 
 const hbs = exphbs.create({
@@ -28,9 +43,17 @@ app.engine('hbs', hbs.engine)
 app.set('view engine', 'hbs')
 app.set('views', 'views')
 
+app.use(async (req, res, next) => {
+  const user = await User.findById('63d273b806576e2f4377b87b')
+  req.user = user;
+  next()
+})
+
 app.use(express.json())
 app.use(express.static(path.join(__dirname, 'public')))
-app.use(express.urlencoded({extended: true}))
+app.use(express.urlencoded({
+  extended: true
+}))
 
 app.use('/', homeRoutes)
 app.use('/add', addRoutes)
