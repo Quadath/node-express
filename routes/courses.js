@@ -7,7 +7,6 @@ router.get('/', async (req, res) => {
   .populate('userId', 'email name')
   .select('title price img')
 
-  console.log(courses)
   res.render('courses', {
     title: 'Курсы',
     isCourses: true,
@@ -41,7 +40,6 @@ router.post('/remove', (req, res) => {
 
 router.get('/:id', async (req, res) => {
   const course = await Course.findById(req.params.id)
-  console.log(req.params.id)
   res.render('course', {
     layout: 'empty',
     title: `Курс ${course.title}`,
