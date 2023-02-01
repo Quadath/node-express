@@ -3,6 +3,10 @@ const path = require('path')
 const exphbs = require('express-handlebars')
 const mongoose = require('mongoose')
 const session = require('express-session')
+const MongoStore = require('connect-mongodb-session')(session)
+
+
+const varMiddleware = require('./middleware/variables')
 
 const authRoutes = require('./routes/auth')
 const homeRoutes = require('./routes/home')
@@ -22,17 +26,17 @@ mongoose.set('strictQuery', false)
 mongoose.connect(URL)
   .then(() => console.log('Connected to MongoDB'))
   .then(async () => {
-    const candidate = await User.findOne()
-    if (!candidate) {
-      const user = new User({
-        email: 'example@email.ua',
-        name: 'Roman',
-        cart: {
-          items: []
-        }
-      })
-      await user.save()
-    }
+    // const candidate = await User.findOne()
+    // if (!candidate) {
+    //   const user = new User({
+    //     email: 'example@email.ua',
+    //     name: 'Roman',
+    //     cart: {
+    //       items: []
+    //     }
+    //   })
+    //   await user.save()
+    // }
   })
   .catch((err) => console.log(`DB connection error: ${err}`))
 
@@ -42,15 +46,14 @@ const hbs = exphbs.create({
   extname: 'hbs'
 })
 
+const store = new MongoStore({
+  collection: 'sessions',
+  uri: "mongodb://127.0.0.1:27017/insults"
+})
+
 app.engine('hbs', hbs.engine)
 app.set('view engine', 'hbs')
 app.set('views', 'views')
-
-app.use(async (req, res, next) => {
-  const user = await User.findById('63d273b806576e2f4377b87b')
-  req.user = user;
-  next()
-})
 
 app.use(express.json())
 app.use(express.static(path.join(__dirname, 'public')))
@@ -60,8 +63,10 @@ app.use(express.urlencoded({
 app.use(session({
   secret: 'some secret value',
   resave: false,
-  saveUninitialized: false
+  saveUninitialized: false,
+  store
 }))
+app.use(varMiddleware)
 
 app.use('/', homeRoutes)
 app.use('/auth', authRoutes)
