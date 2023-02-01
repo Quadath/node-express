@@ -2,7 +2,9 @@ const express = require('express')
 const path = require('path')
 const exphbs = require('express-handlebars')
 const mongoose = require('mongoose')
+const session = require('express-session')
 
+const authRoutes = require('./routes/auth')
 const homeRoutes = require('./routes/home')
 const cardRoutes = require('./routes/card')
 const addRoutes = require('./routes/add')
@@ -55,8 +57,14 @@ app.use(express.static(path.join(__dirname, 'public')))
 app.use(express.urlencoded({
   extended: true
 }))
+app.use(session({
+  secret: 'some secret value',
+  resave: false,
+  saveUninitialized: false
+}))
 
 app.use('/', homeRoutes)
+app.use('/auth', authRoutes)
 app.use('/add', addRoutes)
 app.use('/orders', ordersRoutes)
 app.use('/courses', coursesRoutes)

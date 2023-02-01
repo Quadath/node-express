@@ -31,3 +31,6 @@
   align-items: center;
   justify-content: space-between;
 }
+.auth {
+  padding-top: 1rem;
+}
