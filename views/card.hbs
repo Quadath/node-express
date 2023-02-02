@@ -17,7 +17,7 @@
         <td>{{title}}</td>
         <td>{{count}}</td>
         <td>
-          <button class="btn btm-small js-remove" data-id="{{id}}">Удалить</button>
+          <button class="btn btm-small js-remove" data-csrf="{{@root.csrf}}" data-id="{{id}}">Удалить</button>
         </td>
       </tr>
       {{/each}}
@@ -28,6 +28,8 @@
 
   <form action="/orders" method="POST">
     <button type="submit" class="btn">Сделать заказ</button>
+    <input type="hidden" name="_csrf" value="{{csrf}}">
+
   </form>
 {{else}}
   <p>Корзина пуста</p>
