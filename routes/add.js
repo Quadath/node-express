@@ -11,6 +11,10 @@ router.get('/', auth,(req, res) => {
 })
 
 router.post('/', auth, async (req, res) => {
+  if(isNaN(req.body.price)) {
+    return res.end('sam idi nahui')
+  }
+
   const course = new Course({
     title: req.body.title,
     price: req.body.price,
@@ -21,10 +25,9 @@ router.post('/', auth, async (req, res) => {
   course.save()
   .then((result) => {
     res.status(201)
-    .json(result)    
+    res.redirect('/courses')
   })
   .catch((err) => console.log(`COURSE SAVE ERROR ${err}`))
-  console.log(null == undefined)
 })
 
 module.exports = router

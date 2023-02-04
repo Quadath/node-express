@@ -29,6 +29,10 @@ router.get('/:id/edit', auth, async (req, res) => {
 })
 
 router.post('/edit', auth, async (req, res) => {
+  if(isNaN(req.body.price)) {
+    return res.end('sam idi nahui')
+  }
+
   const {id} = req.body
   await Course.findByIdAndUpdate(id, req.body)
   res.redirect('/courses')

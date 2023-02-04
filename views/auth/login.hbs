@@ -7,7 +7,11 @@
             </ul>
         </div>
         <div id="login" class="col s6 offset-s3">
+           
             <h2>Войти в магазин</h2>
+             {{#if loginError}}
+                <p class="alert">{{loginErrorп}}</p>
+            {{/if}}
             <form action="/auth/login" method="POST">
                 <div class="input-field">
                     <input id="email" name="email" type="email" class="validate" required>
@@ -27,6 +31,9 @@
             </form>
         </div>
         <div id="register" class="col s6 offset-s3">
+             {{#if regError}}
+                <p class="alert">{{regError}}</p>
+            {{/if}}
             <h1>Регистрация</h1>
                   <form action="/auth/register" method="POST">
                 <div class="input-field">
