@@ -19,13 +19,13 @@ const addRoutes = require('./routes/add')
 const ordersRoutes = require('./routes/orders')
 const coursesRoutes = require('./routes/courses')
 
-const app = express()
+const keys = require('./keys')
 
-const URL = "mongodb://127.0.0.1:27017/insults"
+const app = express()
 
 mongoose.set('strictQuery', false)
 
-mongoose.connect(URL)
+mongoose.connect(keys.MONGO_URI)
   .then(() => console.log('Connected to MongoDB'))
   .then(async () => {
     // const candidate = await User.findOne()
@@ -50,7 +50,7 @@ const hbs = exphbs.create({
 
 const store = new MongoStore({
   collection: 'sessions',
-  uri: "mongodb://127.0.0.1:27017/insults"
+  uri: keys.MONGO_URI
 })
 
 app.engine('hbs', hbs.engine)
@@ -63,7 +63,7 @@ app.use(express.urlencoded({
   extended: true
 }))
 app.use(session({
-  secret: 'some secret value',
+  secret: keys.SESSION_SECRET,
   resave: false,
   saveUninitialized: false,
   store
